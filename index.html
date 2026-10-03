@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>КиберДетектив — тест по кибербезопасности</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at top left, #12335c 0, transparent 35%),
+        radial-gradient(circle at bottom right, #071f3e 0, transparent 35%),
+        #050b16;
+    color: #fff;
+    min-height: 100vh;
+}
+
+.app {
+    width: min(900px, calc(100% - 30px));
+    margin: 40px auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: clamp(32px, 7vw, 60px);
+    background: linear-gradient(90deg, #52e0ff, #5d8cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header p {
+    color: #9eb3cc;
+    line-height: 1.6;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.badge {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px;
+    padding: 10px 15px;
+}
+
+.progress {
+    width: 100%;
+    height: 8px;
+    background: #162235;
+    border-radius: 100px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg,#00e1ff,#587cff);
+    transition: .4s;
+}
+
+.card {
+    background: rgba(11,22,39,.92);
+    border: 1px solid rgba(123,198,255,.18);
+    border-radius: 25px;
+    padding: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+}
+
+.category {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    color: #68e8ff;
+    background: rgba(0,210,255,.1);
+    border: 1px solid rgba(0,210,255,.2);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+h2 {
+    margin-top: 18px;
+}
+
+.message {
+    background: #0d1929;
+    border-left: 4px solid #46dff7;
+    padding: 18px;
+    margin: 20px 0;
+    border-radius: 10px;
+    color: #d7e6f5;
+    line-height: 1.65;
+}
+
+.clues {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.clue {
+    background: #111e31;
+    border: 1px solid #243a55;
+    border-radius: 20px;
+    padding: 7px 11px;
+    color: #aabbd0;
+    font-size: 13px;
+}
+
+.answers {
+    display: grid;
+    gap: 12px;
+}
+
+.answer {
+    width: 100%;
+    text-align: left;
+    background: #101b2b;
+    color: #e6f1ff;
+    border: 1px solid #263a52;
+    padding: 17px;
+    border-radius: 15px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.answer:hover {
+    background: #14243a;
+    border-color: #42ceff;
+    transform: translateY(-1px);
+}
+
+.answer.correct {
+    background: rgba(29,190,117,.13);
+    border-color: #29d58a;
+}
+
+.answer.wrong {
+    background: rgba(255,69,79,.12);
+    border-color: #ff5260;
+}
+
+.answer:disabled {
+    cursor: default;
+}
+
+.feedback {
+    display: none;
+    margin-top: 20px;
+    border-radius: 16px;
+    padding: 18px;
+    background: #0c1726;
+    border: 1px solid #263b54;
+}
+
+.feedback-title {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.feedback p {
+    color: #b5c8dd;
+    line-height: 1.6;
+}
+
+.rule {
+    background: #111f32;
+    padding: 13px;
+    border-radius: 10px;
+    color: #dcecff;
+}
+
+.next-btn,
+.restart-btn {
+    margin-top: 18px;
+    width: 100%;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(90deg,#009ed8,#5268ff);
+}
+
+.next-btn:hover,
+.restart-btn:hover {
+    filter: brightness(1.12);
+}
+
+.result {
+    text-align: center;
+}
+
+.result-score {
+    font-size: 70px;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #50e2ff;
+}
+
+.result-title {
+    font-size: 30px;
+}
+
+.result-text {
+    color: #b5c7dc;
+    line-height: 1.7;
+}
+
+.skills {
+    margin-top: 25px;
+    text-align: left;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.skill {
+    padding: 14px;
+    border-radius: 12px;
+    background: #0d1929;
+    color: #cce0f3;
+}
+
+.footer {
+    text-align: center;
+    color: #70849c;
+    margin: 25px;
+    font-size: 13px;
+}
+
+.footer-credit {
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #4f647d;
+    font-weight: 600;
+}
+
+@media(max-width:600px) {
+    .app {
+        margin: 20px auto;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .skills {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Enhanced responsive layout for phones, tablets and desktop */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+button, input, select, textarea {
+    font: inherit;
+}
+
+button {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+    max-width: 900px;
+    width: calc(100% - 32px);
+}
+
+.header h1 {
+    overflow-wrap: anywhere;
+}
+
+.message, .answer, .feedback, .rule, .skill {
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+@media (max-width: 768px) {
+    .app {
+        width: calc(100% - 24px);
+        margin: 22px auto;
+    }
+
+    .header {
+        margin-bottom: 18px;
+    }
+
+    .header h1 {
+        font-size: clamp(30px, 10vw, 48px);
+        line-height: 1.05;
+    }
+
+    .header p {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .topbar {
+        align-items: stretch;
+    }
+
+    .badge {
+        flex: 1 1 0;
+        text-align: center;
+        padding: 10px 8px;
+    }
+
+    .card {
+        border-radius: 20px;
+        padding: 22px;
+    }
+
+    h2 {
+        font-size: 24px;
+        line-height: 1.25;
+    }
+
+    .message {
+        padding: 16px;
+        font-size: 15px;
+    }
+
+    .answer {
+        min-height: 52px;
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    .next-btn, .restart-btn {
+        min-height: 52px;
+        font-size: 16px;
+    }
+
+    .result-score {
+        font-size: clamp(52px, 16vw, 70px);
+    }
+
+    .result-title {
+        font-size: clamp(24px, 8vw, 30px);
+    }
+}
+
+@media (max-width: 480px) {
+    .app {
+        width: calc(100% - 16px);
+        margin: 12px auto;
+    }
+
+    .header h1 {
+        font-size: clamp(27px, 11vw, 40px);
+    }
+
+    .header p {
+        font-size: 14px;
+    }
+
+    .topbar {
+        gap: 8px;
+    }
+
+    .badge {
+        font-size: 14px;
+        border-radius: 12px;
+    }
+
+    .card {
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .category {
+        font-size: 12px;
+    }
+
+    h2 {
+        font-size: 21px;
+        margin-top: 14px;
+    }
+
+    .message {
+        margin: 16px 0;
+        padding: 14px;
+        line-height: 1.55;
+    }
+
+    .clue {
+        font-size: 12px;
+        padding: 7px 9px;
+    }
+
+    .answers {
+        gap: 10px;
+    }
+
+    .answer {
+        padding: 14px;
+        border-radius: 13px;
+    }
+
+    .feedback {
+        padding: 15px;
+    }
+
+    .feedback-title {
+        font-size: 18px;
+    }
+
+    .footer {
+        margin: 20px 8px;
+    }
+}
+
+@media (max-width: 340px) {
+    .topbar {
+        flex-direction: column;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="header">
+        <h1>КИБЕРДЕТЕКТИВ</h1>
+        <p>
+            Виртуальный тренажёр по распознаванию фишинга,
+            социальной инженерии, финансового мошенничества
+            и атак с использованием искусственного интеллекта.
+        </p>
+    </div>
+
+    <div id="game">
+
+        <div class="topbar">
+            <div class="badge">
+                🛡️ Щит:
+                <b id="score">0</b>
+            </div>
+
+            <div class="badge">
+                Дело
+                <b id="number">1</b>/<span id="total">10</span>
+            </div>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+
+        <div class="card">
+
+            <span class="category" id="category"></span>
+
+            <h2 id="title"></h2>
+
+            <div class="message" id="message"></div>
+
+            <div class="clues" id="clues"></div>
+
+            <div class="answers" id="answers"></div>
+
+            <div class="feedback" id="feedback">
+
+                <div
+                    class="feedback-title"
+                    id="feedbackTitle">
+                </div>
+
+                <p id="feedbackText"></p>
+
+                <div class="rule" id="rule"></div>
+
+                <button
+                    class="next-btn"
+                    id="nextBtn">
+                    Следующее дело →
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="result" style="display:none">
+
+        <div class="card result">
+
+            <span class="category">
+                Расследование завершено
+            </span>
+
+            <div
+                class="result-score"
+                id="finalScore">
+            </div>
+
+            <div
+                class="result-title"
+                id="resultTitle">
+            </div>
+
+            <p
+                class="result-text"
+                id="resultText">
+            </p>
+
+            <div class="skills">
+                <div class="skill">🎣 Распознавание фишинга</div>
+                <div class="skill">🧠 Социальная инженерия</div>
+                <div class="skill">🤖 ИИ и Deepfake</div>
+                <div class="skill">💳 Финансовая безопасность</div>
+                <div class="skill">🔐 Защита аккаунтов</div>
+                <div class="skill">🔎 Проверка информации</div>
+            </div>
+
+            <button
+                class="restart-btn"
+                onclick="restartGame()">
+                Пройти тест заново
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <div>Безопасный цифровой мир начинается с внимательности.</div>
+        <div class="footer-credit"><strong>Designed and developed at Torch Studio</strong></div>
+    </div>
+
+</div>
+
+<script>
+
+const questions = [
+
+{
+category:"🎣 Фишинг",
+
+title:"Аккаунт будет заблокирован",
+
+message:
+`На почту приходит сообщение:
+«Обнаружена подозрительная активность.
+Ваш аккаунт будет заблокирован через 10 минут.
+Срочно подтвердите личность по ссылке».`,
+
+clues:[
+"⏱ Срочность",
+"🔗 Ссылка",
+"⚠️ Угроза блокировки"
+],
+
+answers:[
+"Перейти по ссылке и войти",
+"Открыть официальный сайт самостоятельно",
+"Ответить отправителю",
+"Переслать письмо другу"
+],
+
+correct:1,
+
+explanation:
+"Мошенники часто создают чувство срочности, чтобы человек действовал не задумываясь.",
+
+rule:
+"Не переходи по ссылкам из тревожных сообщений. Открой официальный сайт или приложение самостоятельно."
+},
+
+{
+category:"📞 Социальная инженерия",
+
+title:"Звонок из банка",
+
+message:
+`Вам звонит человек, который представляется
+сотрудником службы безопасности банка.
+
+Он знает ваше имя и последние четыре цифры карты.
+
+Для «отмены перевода» он просит код из SMS.`,
+
+clues:[
+"📞 Неожиданный звонок",
+"🔐 Просьба сообщить код",
+"🚨 Давление"
+],
+
+answers:[
+"Сообщить код",
+"Попросить назвать данные паспорта",
+"Завершить разговор и позвонить в банк самостоятельно",
+"Продолжить разговор"
+],
+
+correct:2,
+
+explanation:
+"Знание вашего имени или части номера карты не доказывает, что звонящий является сотрудником банка.",
+
+rule:
+"Никому не сообщай коды подтверждения из SMS."
+},
+
+{
+category:"🤖 Искусственный интеллект",
+
+title:"Видеозвонок от знакомого",
+
+message:
+`Вам звонит знакомый.
+
+На видео его лицо.
+Голос тоже кажется настоящим.
+
+Он говорит:
+«Я попал в неприятности.
+Срочно переведи деньги на эту карту».`,
+
+clues:[
+"🎭 Возможный Deepfake",
+"💸 Просьба о деньгах",
+"🚨 Срочность"
+],
+
+answers:[
+"Перевести небольшую сумму",
+"Попросить прислать фотографию",
+"Перезвонить знакомому по известному номеру",
+"Сразу перевести деньги"
+],
+
+correct:2,
+
+explanation:
+"Современный ИИ позволяет достаточно убедительно подделывать лицо и голос человека.",
+
+rule:
+"Проверяй личность через другой независимый канал связи."
+},
+
+{
+category:"💰 Финансовое мошенничество",
+
+title:"30% прибыли за неделю",
+
+message:
+`В социальной сети появляется реклама:
+
+«Инвестиции нового поколения.
+30% прибыли всего за неделю.
+Без риска.
+
+Только сегодня бонус новым клиентам».`,
+
+clues:[
+"📈 Огромная прибыль",
+"🎁 Ограниченное предложение",
+"⚠️ Обещание отсутствия риска"
+],
+
+answers:[
+"Вложить небольшую сумму",
+"Проверить организацию и её документы",
+"Спросить мнение автора рекламы",
+"Позвать друзей инвестировать"
+],
+
+correct:1,
+
+explanation:
+"Высокая гарантированная прибыль и утверждения об отсутствии риска являются серьёзными признаками сомнительного предложения.",
+
+rule:
+"Чем выше обещанная доходность — тем внимательнее нужно оценивать риск."
+},
+
+{
+category:"🔐 Защита аккаунта",
+
+title:"Проголосуй за меня",
+
+message:
+`Друг присылает сообщение:
+
+«Привет!
+Я участвую в конкурсе.
+Можешь проголосовать за меня?»
+
+После перехода сайт просит
+код авторизации от мессенджера.`,
+
+clues:[
+"👤 Сообщение от знакомого",
+"🔗 Внешняя ссылка",
+"🔑 Запрос кода"
+],
+
+answers:[
+"Ввести код",
+"Отправить код другу",
+"Не вводить код и проверить сообщение другим способом",
+"Создать новый аккаунт"
+],
+
+correct:2,
+
+explanation:
+"Аккаунт знакомого мог быть взломан и использоваться для распространения мошеннических ссылок.",
+
+rule:
+"Код авторизации — фактически ключ от твоего аккаунта."
+},
+
+{
+category:"📦 Интернет-магазины",
+
+title:"Слишком выгодная покупка",
+
+message:
+`Вы находите новый интернет-магазин.
+
+Товар стоит в три раза дешевле,
+чем в других магазинах.
+
+Продавец требует полную предоплату
+переводом на карту физического лица.`,
+
+clues:[
+"🏷 Очень низкая цена",
+"💳 Перевод человеку",
+"🛒 Неизвестный магазин"
+],
+
+answers:[
+"Сразу оплатить",
+"Проверить магазин, отзывы и реквизиты",
+"Отправить половину суммы",
+"Попросить дополнительную скидку"
+],
+
+correct:1,
+
+explanation:
+"Мошеннические магазины часто привлекают покупателей нереалистично низкими ценами.",
+
+rule:
+"Слишком выгодное предложение — повод усилить проверку, а не ускорить оплату."
+},
+
+{
+category:"📲 QR-мошенничество",
+
+title:"QR-код для получения подарка",
+
+message:
+`На улице вы видите объявление:
+
+«Получите бесплатный месяц подписки!
+Отсканируйте QR-код».
+
+После сканирования открывается
+страница авторизации.`,
+
+clues:[
+"📱 Неизвестный QR",
+"🎁 Бесплатный подарок",
+"🔐 Запрос входа"
+],
+
+answers:[
+"Войти в аккаунт",
+"Проверить адрес сайта",
+"Ввести данные банковской карты",
+"Передать ссылку друзьям"
+],
+
+correct:1,
+
+explanation:
+"QR-код может вести на любую страницу, включая копию настоящего сайта.",
+
+rule:
+"После сканирования QR всегда проверяй адрес открывшейся страницы."
+},
+
+{
+category:"🧠 Социальная инженерия",
+
+title:"Письмо от директора",
+
+message:
+`Ученик получает письмо якобы от директора:
+
+«Мне срочно нужна помощь.
+Купите несколько подарочных сертификатов
+и пришлите мне их коды.
+
+Это конфиденциальное поручение».`,
+
+clues:[
+"👔 Авторитет",
+"🤫 Секретность",
+"🚨 Срочность"
+],
+
+answers:[
+"Выполнить поручение",
+"Ответить на письмо",
+"Проверить просьбу лично или по известному контакту",
+"Купить только один сертификат"
+],
+
+correct:2,
+
+explanation:
+"Мошенники часто используют авторитет руководителя или преподавателя, чтобы человек боялся задавать вопросы.",
+
+rule:
+"Необычную просьбу от руководителя всегда проверяй через независимый канал."
+},
+
+{
+category:"💻 Вредоносные файлы",
+
+title:"Документ от неизвестного отправителя",
+
+message:
+`На почту приходит файл:
+
+«Список задолженностей учеников.zip»
+
+Отправитель вам неизвестен,
+но в письме говорится,
+что файл необходимо открыть немедленно.`,
+
+clues:[
+"📎 Неожиданный файл",
+"❓ Неизвестный отправитель",
+"⏱ Срочность"
+],
+
+answers:[
+"Сразу открыть архив",
+"Отключить антивирус и открыть",
+"Не открывать и проверить отправителя",
+"Переслать всем знакомым"
+],
+
+correct:2,
+
+explanation:
+"Вложения могут содержать вредоносные программы или использовать уязвимости устройства.",
+
+rule:
+"Не открывай неожиданные файлы, пока не убедишься в их происхождении."
+},
+
+{
+category:"📰 Цифровая грамотность",
+
+title:"Шокирующая новость",
+
+message:
+`В социальной сети распространяется сообщение:
+
+«СРОЧНО!
+Завтра все банковские карты перестанут работать.
+Снимайте деньги прямо сейчас!»
+
+Источник новости не указан.`,
+
+clues:[
+"🚨 Паника",
+"📢 Громкий заголовок",
+"❓ Нет источника"
+],
+
+answers:[
+"Сразу снять деньги",
+"Переслать родственникам",
+"Проверить информацию в официальных источниках",
+"Написать собственный пост"
+],
+
+correct:2,
+
+explanation:
+"Фейковые сообщения часто используют страх и срочность, чтобы заставить людей распространять информацию без проверки.",
+
+rule:
+"Перед распространением новости найди первоисточник и подтверждение из независимых надёжных источников."
+}
+
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+const total = document.getElementById("total");
+const number = document.getElementById("number");
+const scoreEl = document.getElementById("score");
+const progress = document.getElementById("progress");
+
+const category = document.getElementById("category");
+const title = document.getElementById("title");
+const message = document.getElementById("message");
+const clues = document.getElementById("clues");
+const answers = document.getElementById("answers");
+
+const feedback = document.getElementById("feedback");
+const feedbackTitle = document.getElementById("feedbackTitle");
+const feedbackText = document.getElementById("feedbackText");
+const rule = document.getElementById("rule");
+const nextBtn = document.getElementById("nextBtn");
+
+total.textContent = questions.length;
+
+function renderQuestion() {
+
+    answered = false;
+
+    const q = questions[current];
+
+    number.textContent = current + 1;
+
+    progress.style.width =
+        ((current) / questions.length * 100) + "%";
+
+    category.textContent = q.category;
+    title.textContent = q.title;
+    message.textContent = q.message;
+
+    clues.innerHTML = "";
+
+    q.clues.forEach(text => {
+
+        const element =
+        document.createElement("span");
+
+        element.className = "clue";
+        element.textContent = text;
+
+        clues.appendChild(element);
+
+    });
+
+    answers.innerHTML = "";
+
+    q.answers.forEach((text,index) => {
+
+        const button =
+        document.createElement("button");
+
+        button.className = "answer";
+        button.textContent = text;
+
+        button.addEventListener(
+            "click",
+            () => selectAnswer(index,button)
+        );
+
+        answers.appendChild(button);
+
+    });
+
+    feedback.style.display = "none";
+}
+
+function selectAnswer(index,button) {
+
+    if(answered) return;
+
+    answered = true;
+
+    const q = questions[current];
+
+    const buttons =
+        document.querySelectorAll(".answer");
+
+    buttons.forEach(b => b.disabled = true);
+
+    if(index === q.correct) {
+
+        score++;
+
+        button.classList.add("correct");
+
+        feedbackTitle.textContent =
+            "✅ Верное решение";
+
+    }
+
+    else {
+
+        button.classList.add("wrong");
+
+        buttons[q.correct]
+            .classList.add("correct");
+
+        feedbackTitle.textContent =
+            "⚠️ Опасное решение";
+    }
+
+    scoreEl.textContent = score;
+
+    feedbackText.textContent =
+        q.explanation;
+
+    rule.textContent =
+        "🛡 Киберправило: " + q.rule;
+
+    feedback.style.display = "block";
+
+    if(current === questions.length - 1) {
+
+        nextBtn.textContent =
+            "Посмотреть результат";
+
+    }
+
+    else {
+
+        nextBtn.textContent =
+            "Следующее дело →";
+    }
+}
+
+nextBtn.addEventListener("click", () => {
+
+    if(current <
+       questions.length - 1) {
+
+        current++;
+
+        renderQuestion();
+
+    }
+
+    else {
+
+        showResult();
+    }
+});
+
+function showResult() {
+
+    document.getElementById("game")
+        .style.display = "none";
+
+    const result =
+        document.getElementById("result");
+
+    result.style.display = "block";
+
+    progress.style.width = "100%";
+
+    const percent =
+        Math.round(
+            score /
+            questions.length * 100
+        );
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        score + " / " +
+        questions.length;
+
+    const resultTitle =
+        document.getElementById(
+            "resultTitle"
+        );
+
+    const resultText =
+        document.getElementById(
+            "resultText"
+        );
+
+    if(percent === 100) {
+
+        resultTitle.textContent =
+            "🏆 Кибердетектив";
+
+        resultText.textContent =
+            "Отличный результат. Ты уверенно распознаёшь основные схемы цифрового мошенничества.";
+
+    }
+
+    else if(percent >= 70) {
+
+        resultTitle.textContent =
+            "🛡 Цифровой защитник";
+
+        resultText.textContent =
+            "Хороший результат. Ты замечаешь большинство опасных ситуаций, но некоторые схемы мошенничества ещё способны застать врасплох.";
+
+    }
+
+    else if(percent >= 40) {
+
+        resultTitle.textContent =
+            "🔎 Начинающий детектив";
+
+        resultText.textContent =
+            "Ты уже знаешь некоторые признаки мошенничества. Попробуй пройти тренировку ещё раз.";
+
+    }
+
+    else {
+
+        resultTitle.textContent =
+            "⚠️ Требуется тренировка";
+
+        resultText.textContent =
+            "Многие современные мошеннические схемы выглядят убедительно. Запомни главное: не спеши, не передавай секретные данные и всегда проверяй источник.";
+
+    }
+}
+
+function restartGame() {
+
+    current = 0;
+    score = 0;
+
+    scoreEl.textContent = "0";
+
+    document.getElementById("result")
+        .style.display = "none";
+
+    document.getElementById("game")
+        .style.display = "block";
+
+    renderQuestion();
+}
+
+renderQuestion();
+
+</script>
+
+</body>
+</html>
